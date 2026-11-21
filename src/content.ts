@@ -21,12 +21,14 @@ const productSlugs = [
   'rice-milk-cleansing-balm', 'dew-milk-toner', 'blemish-clearing-serum', 'vitamin-c-glow-drops',
   'peptide-eye-balm', 'cica-sleeping-mask', 'daily-sheer-spf', 'rose-water-mist',
 ]
+const base = import.meta.env.BASE_URL
+
 export const PHOTOS: { hero?: string; about?: string; avatars: string[]; products: Record<string, string | undefined> } = {
-  hero: '/images/hero.webp',
-  about: '/images/about.webp',
+  hero: `${base}images/hero.webp`,
+  about: `${base}images/about.webp`,
   /** Review and community avatars. Use real customer photos only with consent. */
-  avatars: [1, 2, 3, 4].map((n) => `/images/avatar-${n}.webp`),
-  products: Object.fromEntries(productSlugs.map((s) => [s, `/images/${s}.webp`])),
+  avatars: [1, 2, 3, 4].map((n) => `${base}images/avatar-${n}.webp`),
+  products: Object.fromEntries(productSlugs.map((s) => [s, `${base}images/${s}.webp`])),
 }
 
 export const nav = [
