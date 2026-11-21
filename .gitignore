@@ -28,6 +28,6 @@ tmp/
 /.tmp-*
 /.qa/
 
-# Tooling state (Freebuff desktop, cloud attachments)
+# Tooling state (local desktop app, cloud attachments)
 .freebuff/
 .cloud-attachments/

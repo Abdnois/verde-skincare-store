@@ -8,9 +8,9 @@ skin quiz that builds a routine, wishlist, bag drawer, checkout and order
 history. It is built as a React single-page app served by a Cloudflare Worker
 that also exposes a small JSON API.
 
-The store is a front-end demo: there is no payment processor, no email
-delivery and no database. See [Demo behaviour](#demo-behaviour) before showing
-it to anyone as a live shop.
+The store is a front-end portfolio demo: there is no payment processor, no
+email delivery and no database. See [Demo behaviour](#demo-behaviour) for the
+full scope of what is and isn't implemented.
 
 ## Technologies
 
@@ -80,8 +80,7 @@ with `npm run preview -- --port 5000`.
 
 ## Demo behaviour
 
-Everything below works end to end in the browser, but it is deliberately local
-and disposable. Read this before pitching the site as production-ready.
+Everything below works end to end in the browser. The following notes describe what is intentionally out of scope for this demo.
 
 - **Checkout takes no payment.** The form collects contact and shipping details
   only; there is no card field and no processor. It posts the bag to
@@ -89,8 +88,7 @@ and disposable. Read this before pitching the site as production-ready.
   `DL-OV48SQ`.
 - **Orders are not stored on a server.** The confirmation page and `/orders`
   read from `localStorage`, so an order exists only in that browser and
-  disappears if site data is cleared. Nothing is emailed, so the "receipt is on
-  its way" style copy in the UI is aspirational.
+  disappears if site data is cleared. Nothing is emailed, so the "your receipt is on its way" copy in the UI is demo-only copy.
 - **Contact, newsletter and review submissions are acknowledged, not
   delivered.** The Worker validates them and returns a ticket or id; no email
   is sent, no ticket queue exists and no review is moderated by a server.
@@ -154,8 +152,7 @@ every component in each state (hover, focus and pressed are pinned with
 
 Every image goes through `PHOTOS` in `src/content.ts`: hero, the Our Lab
 portrait, four review avatars and one packshot per product, all in
-`public/images/`. They are AI-generated stand-ins; replace them with real
-photography by dropping files in `public/images/` and editing the paths. Remove
+`public/images/`. The images are illustrative, AI-generated stand-ins for this portfolio demo. Replace them with real photography by dropping files in `public/images/` and editing the paths in PHOTOS. Remove
 an entry and that spot falls back to an SVG still life
 (`src/components/ProductArt.tsx`, `HeroArt` in `src/components/Art.tsx`), so the
 store never shows a broken image. Keep the hero subject right of centre — the

@@ -514,7 +514,7 @@ export const footer = {
     { title: 'Help', links: [{ label: 'Contact us', to: '/contact' }, { label: 'Your orders', to: '/orders' }, { label: 'Our lab', to: '/about' }] },
     { title: 'Studio', links: [{ label: 'Style guide', to: '/styleguide' }] },
   ],
-  legal: '© 2026 VERDÉ. Demo store.',
+  legal: '© 2026 VERDÉ. Portfolio demo.',
 }
 
 export const newsletter = {
