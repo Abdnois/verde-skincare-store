@@ -45,7 +45,7 @@ function Page({ children }: { children: ReactNode }) {
 
 export function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <MotionConfig reducedMotion="user">
         <StoreProvider>
           <ScrollToTop />
