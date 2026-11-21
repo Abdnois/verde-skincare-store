@@ -1,0 +1,33 @@
+# Dependencies and build output
+node_modules
+dist
+.wrangler
+
+# Local secrets
+.dev.vars
+.dev.vars.*
+!.dev.vars.example
+
+# OS noise
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# QA screenshots captured to the project root.
+# Root-scoped on purpose: real imagery lives in public/images.
+/*.png
+/*.jpg
+/*.jpeg
+/*.webp
+/*.ps1
+
+# Scratch files from image/QA tooling
+tmp/
+/.tmp-*
+/.qa/
+
+# Tooling state (Freebuff desktop, cloud attachments)
+.freebuff/
+.cloud-attachments/
