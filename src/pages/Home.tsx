@@ -107,7 +107,7 @@ function Hero() {
 
         {/* floating product cards — hidden on mobile to keep the cream hero clean */}
         <div className="relative z-10 order-4 hidden lg:block -mx-4 mt-6 flex snap-x gap-3 overflow-x-auto px-4 pb-2 scrollbar-none sm:-mx-7 sm:px-7 lg:pointer-events-none lg:absolute lg:inset-x-10 lg:bottom-10 lg:mx-0 lg:mt-0 lg:justify-start lg:overflow-visible lg:px-0 lg:pb-0 xl:inset-x-12">
-          <div className="flex gap-3 lg:pointer-events-auto">
+          <div className="flex w-fit gap-3 lg:pointer-events-auto">
             {cards.slice(0, 2).map((p, i) => (
               <motion.div key={p.slug} {...rise(0.5 + i * 0.08)} className="w-[176px] shrink-0 snap-start">
                 <ProductCardCompact product={p} className="h-[280px] bg-[rgba(214,219,201,0.46)] border border-[rgba(163,176,149,0.28)]" />

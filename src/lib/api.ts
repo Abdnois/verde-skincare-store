@@ -1,8 +1,17 @@
 /** POST JSON to a Worker route; throws the route's `error` message on failure. */
+
+const API_BASE = (import.meta.env.VITE_API_BASE ?? '').trim().replace(/\/+$/, '')
+
+export function apiUrl(path: string): string {
+  if (!API_BASE) return path
+  const normalized = path.startsWith('/') ? path : `/${path}`
+  return `${API_BASE}${normalized}`
+}
+
 export async function postJson<T>(url: string, body: unknown): Promise<T> {
   let res: Response
   try {
-    res = await fetch(url, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) })
+    res = await fetch(apiUrl(url), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) })
   } catch {
     throw new Error('We could not reach the server. Check your connection and try again.')
   }

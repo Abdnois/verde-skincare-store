@@ -1,4 +1,5 @@
 import { Hono } from 'hono'
+import { cors } from 'hono/cors'
 
 // The Worker in front of the storefront. The catalogue ships with the app;
 // these routes validate what a real store would send to a server. Replace the
@@ -6,6 +7,18 @@ import { Hono } from 'hono'
 type Env = { ASSETS: Fetcher }
 
 const app = new Hono<{ Bindings: Env }>()
+
+// Allow the GitHub Pages frontend (and the local Vite dev server) to call the
+// API across origins. Origins are explicit — no wildcard — so other sites
+// cannot use this Worker as a backend.
+app.use(
+  '/api/*',
+  cors({
+    origin: ['https://abdnois.github.io', 'http://localhost:5306'],
+    allowMethods: ['GET', 'POST', 'OPTIONS'],
+    allowHeaders: ['Content-Type'],
+  }),
+)
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
 const str = (v: unknown, max = 500) => (typeof v === 'string' ? v.trim().slice(0, max) : '')

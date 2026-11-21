@@ -10,7 +10,7 @@ import { money } from '../lib/money'
 import { totals, useStore, type Order } from '../lib/store'
 import { useTitle } from '../lib/title'
 
-const countries = ['United States', 'Canada', 'United Kingdom', 'Australia']
+const countries = ['United States', 'Canada', 'United Kingdom', 'Australia', 'Bangladesh']
 
 export function Checkout() {
   useTitle('Checkout')
