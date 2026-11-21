@@ -1,5 +1,5 @@
 import { Lock, ShoppingBag, Tag } from 'lucide-react'
-import { useState, type FormEvent } from 'react'
+import { useRef, useState, type FormEvent } from 'react'
 import { useNavigate } from 'react-router'
 
 import { ProductArt } from '../components/ProductArt'
@@ -20,6 +20,7 @@ export function Checkout() {
   const [errors, setErrors] = useState<FieldErrors>({})
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const submitting = useRef(false)
   const [code, setCode] = useState(promo ?? '')
   const [codeError, setCodeError] = useState('')
   const method = shipping.find((s) => s.id === form.shipping)!
@@ -41,6 +42,8 @@ export function Checkout() {
 
   const submit = async (e: FormEvent) => {
     e.preventDefault()
+    if (submitting.current) return
+    submitting.current = true
     setLoading(true)
     setError('')
     try {
@@ -69,6 +72,7 @@ export function Checkout() {
       const first = Object.keys(f)[0]
       if (first) document.getElementById(`checkout-${first}`)?.focus()
     } finally {
+      submitting.current = false
       setLoading(false)
     }
   }

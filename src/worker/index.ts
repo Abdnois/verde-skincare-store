@@ -23,8 +23,48 @@ app.use(
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
 const str = (v: unknown, max = 500) => (typeof v === 'string' ? v.trim().slice(0, max) : '')
 
-async function body(c: { req: { json: <T>() => Promise<T> } }): Promise<Record<string, unknown> | null> {
-  const data = await c.req.json<unknown>().catch(() => null)
+const MAX_BODY_BYTES = 100 * 1024
+
+async function readBody(c: { req: { raw: Request; header: (name: string) => string | undefined } }): Promise<string | 'too_large'> {
+  const declared = Number(c.req.header('content-length') ?? '')
+  if (Number.isFinite(declared) && declared > MAX_BODY_BYTES) return 'too_large'
+
+  const reader = c.req.raw.body?.getReader()
+  if (!reader) return ''
+
+  const chunks: Uint8Array[] = []
+  let total = 0
+  while (true) {
+    const { done, value } = await reader.read()
+    if (done) break
+    if (!value) continue
+    total += value.byteLength
+    if (total > MAX_BODY_BYTES) {
+      await reader.cancel()
+      return 'too_large'
+    }
+    chunks.push(value)
+  }
+
+  const merged = new Uint8Array(total)
+  let offset = 0
+  for (const chunk of chunks) {
+    merged.set(chunk, offset)
+    offset += chunk.byteLength
+  }
+  return new TextDecoder().decode(merged)
+}
+
+async function body(c: { req: { raw: Request; header: (name: string) => string | undefined } }): Promise<Record<string, unknown> | null | 'too_large'> {
+  const text = await readBody(c)
+  if (text === 'too_large') return 'too_large'
+  if (text === '') return null
+  let data: unknown
+  try {
+    data = JSON.parse(text)
+  } catch {
+    return null
+  }
   return data && typeof data === 'object' && !Array.isArray(data) ? (data as Record<string, unknown>) : null
 }
 
@@ -32,6 +72,7 @@ app.get('/api/health', (c) => c.json({ ok: true }))
 
 app.post('/api/orders', async (c) => {
   const b = await body(c)
+  if (b === 'too_large') return c.json({ error: 'Request body too large.' }, 413)
   if (!b) return c.json({ error: 'Send the order as JSON.' }, 400)
   const fields: Record<string, string> = {}
   if (!EMAIL.test(str(b.email))) fields.email = 'Enter a valid email address.'
@@ -54,12 +95,14 @@ app.post('/api/orders', async (c) => {
 
 app.post('/api/newsletter', async (c) => {
   const b = await body(c)
+  if (b === 'too_large') return c.json({ error: 'Request body too large.' }, 413)
   if (!b || !EMAIL.test(str(b.email))) return c.json({ error: 'Enter a valid email address.', fields: { email: 'Enter a valid email address.' } }, 422)
   return c.json({ ok: true }, 201)
 })
 
 app.post('/api/contact', async (c) => {
   const b = await body(c)
+  if (b === 'too_large') return c.json({ error: 'Request body too large.' }, 413)
   if (!b) return c.json({ error: 'Send the message as JSON.' }, 400)
   const fields: Record<string, string> = {}
   if (str(b.name).length < 2) fields.name = 'Tell us your name.'
@@ -72,6 +115,7 @@ app.post('/api/contact', async (c) => {
 
 app.post('/api/reviews', async (c) => {
   const b = await body(c)
+  if (b === 'too_large') return c.json({ error: 'Request body too large.' }, 413)
   if (!b) return c.json({ error: 'Send the review as JSON.' }, 400)
   const fields: Record<string, string> = {}
   const rating = Number(b.rating)
