@@ -1,5 +1,7 @@
 # VERDÉ
 
+**Live demo:** https://abdnois.github.io/verde-skincare-store/
+
 A skincare storefront for a small-batch centella range: a framed hero with
 floating product cards, a filterable catalogue, product pages with reviews, a
 skin quiz that builds a routine, wishlist, bag drawer, checkout and order
